@@ -69,4 +69,15 @@ public:
 
     /**
      * @brief Calculates the velocity of an object relative to the sensor.
-     * @return float Speed in cm/s. Positive = moving
+     * @return float Speed in cm/s. Positive = moving away, Negative = approaching.
+     */
+    float getSpeedCMperSec();
+
+private:
+    int _trigPin;
+    int _echoPin;
+    float _lastDistance;
+    unsigned long _lastTime;
+};
+
+#endif
