@@ -1,6 +1,30 @@
+#######################################
+# Syntax Coloring Map For UltrasonicX
+#######################################
+
+#######################################
+# Datatypes (KEYWORD1)
+#######################################
 UltrasonicX	KEYWORD1
+
+#######################################
+# Methods and Functions (KEYWORD2)
+#######################################
 begin	KEYWORD2
 getDistanceCM	KEYWORD2
 getDistanceIN	KEYWORD2
-isMotionDetected	KEYWORD2
+getRawMicroseconds	KEYWORD2
 getAverageDistance	KEYWORD2
+isObjectDetected	KEYWORD2
+isCloserThan	KEYWORD2
+isFartherThan	KEYWORD2
+isValidReading	KEYWORD2
+isMotionDetected	KEYWORD2
+isApproaching	KEYWORD2
+isReceding	KEYWORD2
+getSpeedCMperSec	KEYWORD2
+getRadarData	KEYWORD2
+
+#######################################
+# Constants (LITERAL1)
+#######################################

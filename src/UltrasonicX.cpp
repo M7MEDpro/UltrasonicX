@@ -47,6 +47,14 @@ bool UltrasonicX::isCloserThan(float distance) {
     return isObjectDetected(distance);
 }
 
+bool UltrasonicX::isFartherThan(float distance) {
+    return getDistanceCM() > distance;
+}
+
+bool UltrasonicX::isValidReading() {
+    return getDistanceCM() > 0.0;
+}
+
 float UltrasonicX::getAverageDistance(int samples) {
     float sum = 0;
     for(int i = 0; i < samples; i++) {
@@ -56,12 +64,25 @@ float UltrasonicX::getAverageDistance(int samples) {
     return sum / samples;
 }
 
-bool UltrasonicX::isMotionDetected() {
+bool UltrasonicX::isMotionDetected(float threshold) {
     float current = getDistanceCM();
-    // Returns true if change is greater than 2cm sensitivity threshold
-    bool motion = abs(current - _lastDistance) > 2.0;
+    bool motion = abs(current - _lastDistance) > threshold;
     _lastDistance = current;
     return motion;
+}
+
+bool UltrasonicX::isApproaching(float threshold) {
+    float current = getDistanceCM();
+    bool approaching = (_lastDistance - current) > threshold;
+    _lastDistance = current;
+    return approaching;
+}
+
+bool UltrasonicX::isReceding(float threshold) {
+    float current = getDistanceCM();
+    bool receding = (current - _lastDistance) > threshold;
+    _lastDistance = current;
+    return receding;
 }
 
 float UltrasonicX::getSpeedCMperSec() {
@@ -81,4 +102,10 @@ float UltrasonicX::getSpeedCMperSec() {
     _lastTime = currentTime;
 
     return speed;
+}
+
+String UltrasonicX::getRadarData(int angle) {
+    int distance = (int)getDistanceCM();
+    // Common format used by Processing and similar GUI apps for radar
+    return String(angle) + "," + String(distance) + ".";
 }
