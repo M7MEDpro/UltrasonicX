@@ -1,0 +1,6 @@
+UltrasonicX	KEYWORD1
+begin	KEYWORD2
+getDistanceCM	KEYWORD2
+getDistanceIN	KEYWORD2
+isMotionDetected	KEYWORD2
+getAverageDistance	KEYWORD2
