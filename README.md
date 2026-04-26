@@ -11,12 +11,6 @@ An advanced, non-blocking ultrasonic sensor library for HC-SR04 and similar modu
 - **Averaging Filter:** Smooth out noisy data by taking multiple rapid readings and returning the mean.
 - **Radar Support:** Output data formatted for radar screens and Processing interfaces.
 
-## Installation
-1. Download this repository as a `.zip` file.
-2. Open the Arduino IDE.
-3. Go to **Sketch** -> **Include Library** -> **Add .ZIP Library...**.
-4. Select the downloaded `.zip` file.
-5. Include the library in your code using `#include <UltrasonicX.h>`.
 
 ## API Reference
 
