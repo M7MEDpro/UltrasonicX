@@ -17,7 +17,7 @@ void loop() {
     Serial.println(" cm");
 
     // Check if an object has entered our threshold zone
-    if (sonar.isObjectDetected(THRESHOLD)) {
+    if (sonar.isCloserThan(THRESHOLD)) {
         Serial.println("ALERT: Object detected within 15 cm!");
     }
 
@@ -26,8 +26,13 @@ void loop() {
         Serial.println("WARNING: Object is dangerously close (under 5 cm)!");
     }
 
+    // Check if an object is between 20 and 30 cm
+    if (sonar.isBetween(20.0, 30.0)) {
+        Serial.println("INFO: Object is between 20cm and 30cm.");
+    }
+
     // Check if path is clear
-    if (sonar.isFartherThan(50.0)) {
+    if (sonar.isMoreThan(50.0)) {
         Serial.println("All clear: No objects within 50 cm.");
     }
 

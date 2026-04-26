@@ -1,5 +1,6 @@
 #include <UltrasonicX.h>
 
+// Initialize sensor on Trigger Pin 9 and Echo Pin 10
 UltrasonicX sonar(9, 10);
 
 void setup() {
@@ -8,14 +9,9 @@ void setup() {
 }
 
 void loop() {
-
     Serial.print("Distance: ");
     Serial.print(sonar.getDistanceCM());
     Serial.println(" cm");
-
-    if(sonar.isMotionDetected()) {
-    Serial.println("Motion detected!");
-}
 
     delay(500);
 }

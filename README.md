@@ -1,9 +1,10 @@
 # UltrasonicX Arduino Library
 
-An advanced and easy-to-use ultrasonic sensor library for HC-SR04 and similar modules.
+An advanced, non-blocking ultrasonic sensor library for HC-SR04 and similar modules. 
 
 ## Features
-- **Distance Measurement:** Get highly accurate readings in Centimeters (cm) and Inches (in).
+- **Non-Blocking Architecture:** Uses reduced timeouts and caching to prevent your Arduino's `loop()` from hanging.
+- **Multiple Units:** Get highly accurate readings in Centimeters (cm), Millimeters (mm), Meters (m), Inches (in), Feet (ft), and Yards (yd).
 - **Object Detection:** Easily check if objects are within a specific threshold, or further away.
 - **Motion Detection:** Automatically detect if an object has moved relative to the sensor, or if it is approaching/receding.
 - **Speed Calculation:** Calculate the velocity of an object (cm/s) as it approaches or moves away.
@@ -19,85 +20,44 @@ An advanced and easy-to-use ultrasonic sensor library for HC-SR04 and similar mo
 
 ## API Reference
 
-### Constructor & Initialization
+### Initialization
 
-#### `UltrasonicX(int trigPin, int echoPin)`
-Initializes the library with the pins connected to the sensor.
-* **trigPin:** The digital pin used for the trigger signal.
-* **echoPin:** The digital pin used to receive the echo signal.
-
-#### `void begin()`
-Configures the `trigPin` as `OUTPUT` and `echoPin` as `INPUT`. This must be called within your `setup()` function.
-
----
+| Method | Description |
+| :--- | :--- |
+| `UltrasonicX(int trigPin, int echoPin)` | Initializes the library with the trigger and echo pins connected to the sensor. |
+| `void begin()` | Configures the pins. Must be called within your `setup()` function. |
 
 ### Distance Measurement
 
-#### `float getDistanceCM()`
-Calculates the current distance to an object in centimeters based on a speed of sound of ~0.0343 cm/us.
-* **Returns:** Distance as a `float`.
-
-#### `float getDistanceIN()`
-Calculates the current distance to an object in inches (1 cm = 0.393701 inches).
-* **Returns:** Distance as a `float`.
-
-#### `float getAverageDistance(int samples = 5)`
-Takes multiple readings (defaulting to 5) and returns the mathematical mean to filter out electrical or environmental noise.
-* **samples:** Number of readings to average.
-* **Returns:** Smoothed distance in cm.
-
-#### `bool isValidReading()`
-Checks if the sensor is providing a valid reading (greater than 0 distance).
-* **Returns:** `true` if the reading is valid.
-
----
+| Method | Return Type | Description |
+| :--- | :--- | :--- |
+| `getDistanceCM()` | `float` | Calculates the distance to an object in centimeters. |
+| `getDistanceMM()` | `float` | Calculates the distance to an object in millimeters. |
+| `getDistanceM()` | `float` | Calculates the distance to an object in meters. |
+| `getDistanceIN()` | `float` | Calculates the distance to an object in inches. |
+| `getDistanceFT()` | `float` | Calculates the distance to an object in feet. |
+| `getDistanceYD()` | `float` | Calculates the distance to an object in yards. |
+| `getAverageDistance(int samples = 5)` | `float` | Takes multiple readings and returns the smoothed mathematical mean (in cm). |
+| `getRawMicroseconds()` | `long` | Sends a pulse and returns the raw travel time of the sound wave. Returns `0` on timeout. |
+| `isValidReading()` | `bool` | Checks if the sensor is providing a valid reading (greater than 0 distance). |
 
 ### Object & Motion Detection
 
-#### `bool isObjectDetected(float threshold)`
-Checks if an object is currently closer than the specified threshold.
-* **threshold:** The distance limit in cm.
-* **Returns:** `true` if an object is detected within range.
-
-#### `bool isCloserThan(float threshold)`
-An alias for `isObjectDetected`.
-
-#### `bool isFartherThan(float threshold)`
-Checks if an object is currently farther than the specified threshold.
-* **threshold:** The distance limit in cm.
-* **Returns:** `true` if an object is farther than the specified limit.
-
-#### `bool isMotionDetected(float threshold = 2.0)`
-Compares the current distance reading to the previous one. It returns `true` if the distance has changed by more than the threshold since the last time this function was called.
-* **threshold:** Sensitivity in cm. Default is 2.0cm.
-* **Returns:** `true` if movement is detected.
-
-#### `bool isApproaching(float threshold = 2.0)`
-Compares the current distance reading to the previous one. It returns `true` if the object moved closer by more than the threshold since the last time this function was called.
-* **threshold:** Sensitivity in cm. Default is 2.0cm.
-* **Returns:** `true` if the object is approaching.
-
-#### `bool isReceding(float threshold = 2.0)`
-Compares the current distance reading to the previous one. It returns `true` if the object moved farther by more than the threshold since the last time this function was called.
-* **threshold:** Sensitivity in cm. Default is 2.0cm.
-* **Returns:** `true` if the object is receding.
-
----
+| Method | Return Type | Description |
+| :--- | :--- | :--- |
+| `isCloserThan(float maxDistance)` | `bool` | Checks if an object is currently closer than the specified maximum distance (cm). |
+| `isMoreThan(float minDistance)` | `bool` | Checks if an object is currently farther than the specified minimum distance (cm). |
+| `isBetween(float minDistance, float maxDistance)` | `bool` | Checks if an object is between a specified minimum and maximum distance (cm). |
+| `isMotionDetected(float threshold = 2.0)` | `bool` | Returns `true` if the distance has changed by more than the threshold since the last check. |
+| `isApproaching(float threshold = 2.0)` | `bool` | Returns `true` if the object moved closer by more than the threshold. |
+| `isReceding(float threshold = 2.0)` | `bool` | Returns `true` if the object moved farther by more than the threshold. |
 
 ### Advanced Metrics & Tools
 
-#### `float getSpeedCMperSec()`
-Calculates the velocity of an object relative to the sensor based on the change in distance over time.
-* **Returns:** Speed in cm/s. A positive value indicates the object is moving away; a negative value indicates it is approaching.
-
-#### `long getRawMicroseconds()`
-Sends a 10µs pulse and returns the raw travel time of the sound wave.
-* **Returns:** Time in microseconds; returns `0` if no echo is received (out of range).
-
-#### `String getRadarData(int angle)`
-Formats the reading for applications like Processing to build a radar screen.
-* **angle:** The current angle of the servo motor holding the sensor.
-* **Returns:** A `String` formatted as `"angle,distance."`
+| Method | Return Type | Description |
+| :--- | :--- | :--- |
+| `getSpeedCMperSec()` | `float` | Calculates the velocity of an object. Positive = moving away, Negative = approaching. |
+| `getRadarData(int angle)` | `String` | Formats reading as `"angle,distance."` for Processing applications or serial plotters. |
 
 ---
 
